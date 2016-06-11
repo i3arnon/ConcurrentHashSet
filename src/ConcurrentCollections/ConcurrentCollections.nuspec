@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>ConcurrentHashSet</id>
+    <version>$version$</version>
+    <title>ConcurrentHashSet</title>
+    <authors>Bar Arnon</authors>
+    <owners>i3arnon</owners>
+    <licenseUrl>https://raw.githubusercontent.com/i3arnon/ConcurrentHashSet/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/i3arnon/ConcurrentHashSet</projectUrl>
+    <description>A thread-safe hash-based unique collection</description>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <copyright>Copyright © Bar Arnon 2016</copyright>
+  </metadata>
+</package>
