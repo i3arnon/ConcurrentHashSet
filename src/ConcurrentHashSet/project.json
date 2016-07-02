@@ -1,0 +1,31 @@
+{
+  "version": "0.3.0-*",
+  "title": "ConcurrentHashSet",
+  "description": "A thread-safe hash-based unique collection",
+  "authors": [ "Bar Arnon" ],
+  "copyright": "Copyright 2016 Bar Arnon",
+  "packOptions": {
+    "tags": [ "concurrency" ],
+    "owners": [ "i3arnon" ],
+    "projectUrl": "https://github.com/i3arnon/ConcurrentHashSet",
+    "licenseUrl": "https://raw.githubusercontent.com/i3arnon/ConcurrentHashSet/master/LICENSE",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/i3arnon/ConcurrentHashSet"
+    }
+  },
+  "buildOptions": {
+    "xmlDoc": true,
+    "warningsAsErrors": true
+  },
+  "supports": { },
+  "dependencies": {
+    "System.Collections": "4.0.11",
+    "System.Diagnostics.Debug": "4.0.11",
+    "System.Runtime.Extensions": "4.1.0",
+    "System.Threading": "4.0.11"
+  },
+  "frameworks": {
+    "netstandard1.0": { }
+  }
+}
