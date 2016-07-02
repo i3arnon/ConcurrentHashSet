@@ -1,1 +1,0 @@
-dotnet pack -c Release --version-suffix beta1
