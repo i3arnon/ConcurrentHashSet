@@ -313,15 +313,15 @@ namespace ConcurrentCollections
 
             // We can get away w/out a lock here.
             // The Volatile.Read ensures that the load of the fields of 'n' doesn't move before the load from buckets[i].
-            var n = Volatile.Read(ref tables.Buckets[bucketNo]);
+            var current = Volatile.Read(ref tables.Buckets[bucketNo]);
 
-            while (n != null)
+            while (current != null)
             {
-                if (hashcode == n.Hashcode && _comparer.Equals(n.Item, item))
+                if (hashcode == current.Hashcode && _comparer.Equals(current.Item, item))
                 {
                     return true;
                 }
-                n = n.Next;
+                current = current.Next;
             }
 
             return false;
@@ -432,7 +432,7 @@ namespace ConcurrentCollections
 
                 if (array.Length - count < arrayIndex || count < 0) //"count" itself or "count + arrayIndex" can overflow
                 {
-                    throw new ArgumentException("The index is equal to or greater than the length of the array, or the number of elements in the dictionary is greater than the available space from index to the end of the destination array.");
+                    throw new ArgumentException("The index is equal to or greater than the length of the array, or the number of elements in the set is greater than the available space from index to the end of the destination array.");
                 }
 
                 CopyToItems(array, arrayIndex);
@@ -628,7 +628,7 @@ namespace ConcurrentCollections
                     // To achieve that, we set the budget to int.MaxValue.
                     //
                     // (There is one special case that would allow GrowTable() to be called in the future: 
-                    // calling Clear() on the ConcurrentDictionary will shrink the table and lower the budget.)
+                    // calling Clear() on the ConcurrentHashSet will shrink the table and lower the budget.)
                     _budget = int.MaxValue;
                 }
 
