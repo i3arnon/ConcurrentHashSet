@@ -4,7 +4,7 @@
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ConcurrentHashSet")]
-[assembly: AssemblyDescription("A thread-safe hash-based unique collection")]
+[assembly: AssemblyDescription("A thread-safe hash-based set")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Bar Arnon")]
 [assembly: AssemblyProduct("ConcurrentHashSet")]
