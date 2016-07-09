@@ -1,7 +1,7 @@
 {
   "version": "0.3.0-*",
   "title": "ConcurrentHashSet",
-  "description": "A thread-safe hash-based unique collection",
+  "description": "A thread-safe hash-based set",
   "authors": [ "Bar Arnon" ],
   "copyright": "Copyright 2016 Bar Arnon",
   "packOptions": {
