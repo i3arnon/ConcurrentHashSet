@@ -355,25 +355,25 @@ namespace ConcurrentCollections
                     }
 
                     Node previous = null;
-                    for (var curr = tables.Buckets[bucketNo]; curr != null; curr = curr.Next)
+                    for (var current = tables.Buckets[bucketNo]; current != null; current = current.Next)
                     {
-                        Debug.Assert((previous == null && curr == tables.Buckets[bucketNo]) || previous.Next == curr);
+                        Debug.Assert((previous == null && current == tables.Buckets[bucketNo]) || previous.Next == current);
 
-                        if (hashcode == curr.Hashcode && _comparer.Equals(curr.Item, item))
+                        if (hashcode == current.Hashcode && _comparer.Equals(current.Item, item))
                         {
                             if (previous == null)
                             {
-                                Volatile.Write(ref tables.Buckets[bucketNo], curr.Next);
+                                Volatile.Write(ref tables.Buckets[bucketNo], current.Next);
                             }
                             else
                             {
-                                previous.Next = curr.Next;
+                                previous.Next = current.Next;
                             }
 
                             tables.CountPerLock[lockNo]--;
                             return true;
                         }
-                        previous = curr;
+                        previous = current;
                     }
                 }
 
@@ -485,14 +485,14 @@ namespace ConcurrentCollections
 
                     // Try to find this item in the bucket
                     Node previous = null;
-                    for (var node = tables.Buckets[bucketNo]; node != null; node = node.Next)
+                    for (var current = tables.Buckets[bucketNo]; current != null; current = current.Next)
                     {
-                        Debug.Assert((previous == null && node == tables.Buckets[bucketNo]) || previous.Next == node);
-                        if (hashcode == node.Hashcode && _comparer.Equals(node.Item, item))
+                        Debug.Assert((previous == null && current == tables.Buckets[bucketNo]) || previous.Next == current);
+                        if (hashcode == current.Hashcode && _comparer.Equals(current.Item, item))
                         {
                             return false;
                         }
-                        previous = node;
+                        previous = current;
                     }
 
                     // The item was not found in the bucket. Insert the new item.
