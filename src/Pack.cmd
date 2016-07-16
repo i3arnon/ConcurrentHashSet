@@ -1,1 +1,1 @@
-dotnet pack ConcurrentHashSet -c Release --version-suffix beta2
+dotnet pack ConcurrentHashSet -c Release --version-suffix ""
