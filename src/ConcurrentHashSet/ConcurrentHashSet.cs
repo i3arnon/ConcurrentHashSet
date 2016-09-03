@@ -268,8 +268,6 @@ namespace ConcurrentCollections
         /// contains too many items.</exception>
         public bool Add(T item)
         {
-            if (item == null) throw new ArgumentNullException(nameof(item));
-
             return AddInternal(item, _comparer.GetHashCode(item), true);
         }
 
@@ -302,8 +300,6 @@ namespace ConcurrentCollections
         /// <exception cref="T:System.ArgumentNullException"><paramref name="item"/> is a null reference.</exception>
         public bool Contains(T item)
         {
-            if (item == null) throw new ArgumentNullException(nameof(item));
-
             var hashcode = _comparer.GetHashCode(item);
 
             // We must capture the _buckets field in a local variable. It is set to a new table on each table resize.
@@ -335,8 +331,6 @@ namespace ConcurrentCollections
         /// <exception cref="T:System.ArgumentNullException"><paramref name="item"/> is a null reference.</exception>
         public bool TryRemove(T item)
         {
-            if (item == null) throw new ArgumentNullException(nameof(item));
-
             var hashcode = _comparer.GetHashCode(item);
             while (true)
             {
