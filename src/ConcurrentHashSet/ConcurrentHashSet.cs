@@ -443,8 +443,6 @@ namespace ConcurrentCollections
         {
             foreach (var item in collection)
             {
-                if (item == null) throw new ArgumentNullException(nameof(collection));
-
                 AddInternal(item, _comparer.GetHashCode(item), false);
             }
 
