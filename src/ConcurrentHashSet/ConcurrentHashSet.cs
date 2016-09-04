@@ -265,10 +265,8 @@ namespace ConcurrentCollections
         /// successfully; false if it already exists.</returns>
         /// <exception cref="T:System.OverflowException">The <see cref="ConcurrentHashSet{T}"/>
         /// contains too many items.</exception>
-        public bool Add(T item)
-        {
-            return AddInternal(item, _comparer.GetHashCode(item), true);
-        }
+        public bool Add(T item) =>
+            AddInternal(item, _comparer.GetHashCode(item), true);
 
         /// <summary>
         /// Removes all items from the <see cref="ConcurrentHashSet{T}"/>.
