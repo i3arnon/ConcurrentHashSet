@@ -263,7 +263,6 @@ namespace ConcurrentCollections
         /// <param name="item">The item to add.</param>
         /// <returns>true if the items was added to the <see cref="ConcurrentHashSet{T}"/>
         /// successfully; false if it already exists.</returns>
-        /// <exception cref="T:System.ArgumentNullException"><paramref name="item"/> is null reference.</exception>
         /// <exception cref="T:System.OverflowException">The <see cref="ConcurrentHashSet{T}"/>
         /// contains too many items.</exception>
         public bool Add(T item)
@@ -297,7 +296,6 @@ namespace ConcurrentCollections
         /// </summary>
         /// <param name="item">The item to locate in the <see cref="ConcurrentHashSet{T}"/>.</param>
         /// <returns>true if the <see cref="ConcurrentHashSet{T}"/> contains the item; otherwise, false.</returns>
-        /// <exception cref="T:System.ArgumentNullException"><paramref name="item"/> is a null reference.</exception>
         public bool Contains(T item)
         {
             var hashcode = _comparer.GetHashCode(item);
@@ -328,7 +326,6 @@ namespace ConcurrentCollections
         /// </summary>
         /// <param name="item">The item to remove.</param>
         /// <returns>true if an item was removed successfully; otherwise, false.</returns>
-        /// <exception cref="T:System.ArgumentNullException"><paramref name="item"/> is a null reference.</exception>
         public bool TryRemove(T item)
         {
             var hashcode = _comparer.GetHashCode(item);
