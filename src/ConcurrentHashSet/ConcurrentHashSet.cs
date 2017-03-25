@@ -330,8 +330,7 @@ namespace ConcurrentCollections
             {
                 var tables = _tables;
 
-                int bucketNo, lockNo;
-                GetBucketAndLockNo(hashcode, out bucketNo, out lockNo, tables.Buckets.Length, tables.Locks.Length);
+                GetBucketAndLockNo(hashcode, out int bucketNo, out int lockNo, tables.Buckets.Length, tables.Locks.Length);
 
                 lock (tables.Locks[lockNo])
                 {
@@ -450,10 +449,9 @@ namespace ConcurrentCollections
         {
             while (true)
             {
-                int bucketNo, lockNo;
-
                 var tables = _tables;
-                GetBucketAndLockNo(hashcode, out bucketNo, out lockNo, tables.Buckets.Length, tables.Locks.Length);
+
+                GetBucketAndLockNo(hashcode, out int bucketNo, out int lockNo, tables.Buckets.Length, tables.Locks.Length);
 
                 var resizeDesired = false;
                 var lockTaken = false;
@@ -473,7 +471,7 @@ namespace ConcurrentCollections
                     Node previous = null;
                     for (var current = tables.Buckets[bucketNo]; current != null; current = current.Next)
                     {
-                        Debug.Assert((previous == null && current == tables.Buckets[bucketNo]) || previous.Next == current);
+                        Debug.Assert(previous == null && current == tables.Buckets[bucketNo] || previous.Next == current);
                         if (hashcode == current.Hashcode && _comparer.Equals(current.Item, item))
                         {
                             return false;
@@ -644,8 +642,7 @@ namespace ConcurrentCollections
                     while (current != null)
                     {
                         var next = current.Next;
-                        int newBucketNo, newLockNo;
-                        GetBucketAndLockNo(current.Hashcode, out newBucketNo, out newLockNo, newBuckets.Length, newLocks.Length);
+                        GetBucketAndLockNo(current.Hashcode, out int newBucketNo, out int newLockNo, newBuckets.Length, newLocks.Length);
 
                         newBuckets[newBucketNo] = new Node(current.Item, current.Hashcode, newBuckets[newBucketNo]);
 

@@ -14,7 +14,7 @@ namespace ConcurrentCollections
             get
             {
                 var now = Environment.TickCount;
-                if (_processorCount == 0 || (now - _lastProcessorCountRefreshTicks) >= ProcessorCountRefreshIntervalMs)
+                if (_processorCount == 0 || now - _lastProcessorCountRefreshTicks >= ProcessorCountRefreshIntervalMs)
                 {
                     _processorCount = Environment.ProcessorCount;
                     _lastProcessorCountRefreshTicks = now;
