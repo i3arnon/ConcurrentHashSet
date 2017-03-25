@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.0</TargetFramework>
+    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <RootNamespace>ConcurrentCollections</RootNamespace>
+    <AssemblyName>ConcurrentCollections</AssemblyName>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>ConcurrentHashSet</PackageId>
+    <Product>ConcurrentHashSet</Product>
+    <Version>1.0.0-beta1</Version>
+    <Authors>Bar Arnon</Authors>
+    <Company>Bar Arnon</Company>
+    <Description>A thread-safe hash-based set</Description>
+    <Copyright>Copyright 2017 Bar Arnon</Copyright>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/i3arnon/ConcurrentHashSet/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/i3arnon/ConcurrentHashSet</PackageProjectUrl>
+    <PackageTags>concurrency</PackageTags>
+    <RepositoryUrl>https://github.com/i3arnon/ConcurrentHashSet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <DocumentationFile>ConcurrentCollections.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Collections" Version="4.0.11" />
+    <PackageReference Include="System.Diagnostics.Debug" Version="4.0.11" />
+    <PackageReference Include="System.Runtime.Extensions" Version="4.1.0" />
+    <PackageReference Include="System.Threading" Version="4.0.11" />
+  </ItemGroup>
+
+</Project>
