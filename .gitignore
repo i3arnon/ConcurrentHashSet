@@ -1,5 +1,5 @@
-project.lock.json
-
 .vs/
 bin/
 obj/
+
+ConcurrentCollections.xml
