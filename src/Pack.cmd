@@ -1,1 +1,0 @@
-dotnet pack ConcurrentHashSet -c Release --version-suffix ""
