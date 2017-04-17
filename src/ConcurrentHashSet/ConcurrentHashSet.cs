@@ -99,7 +99,7 @@ namespace ConcurrentCollections
         /// uses the default comparer for the item type.
         /// </summary>
         public ConcurrentHashSet()
-            : this(DefaultConcurrencyLevel, DefaultCapacity, true, EqualityComparer<T>.Default)
+            : this(DefaultConcurrencyLevel, DefaultCapacity, true, null)
         {
         }
 
@@ -119,7 +119,7 @@ namespace ConcurrentCollections
         /// <exception cref="T:System.ArgumentOutOfRangeException"> <paramref name="capacity"/> is less than
         /// 0.</exception>
         public ConcurrentHashSet(int concurrencyLevel, int capacity)
-            : this(concurrencyLevel, capacity, false, EqualityComparer<T>.Default)
+            : this(concurrencyLevel, capacity, false, null)
         {
         }
 
@@ -135,7 +135,7 @@ namespace ConcurrentCollections
         /// <see cref="ConcurrentHashSet{T}"/>.</param>
         /// <exception cref="T:System.ArgumentNullException"><paramref name="collection"/> is a null reference.</exception>
         public ConcurrentHashSet(IEnumerable<T> collection)
-            : this(collection, EqualityComparer<T>.Default)
+            : this(collection, null)
         {
         }
 
@@ -146,7 +146,6 @@ namespace ConcurrentCollections
         /// </summary>
         /// <param name="comparer">The <see cref="T:System.Collections.Generic.IEqualityComparer{T}"/>
         /// implementation to use when comparing items.</param>
-        /// <exception cref="T:System.ArgumentNullException"><paramref name="comparer"/> is a null reference.</exception>
         public ConcurrentHashSet(IEqualityComparer<T> comparer)
             : this(DefaultConcurrencyLevel, DefaultCapacity, true, comparer)
         {
@@ -166,8 +165,7 @@ namespace ConcurrentCollections
         /// <param name="comparer">The <see cref="T:System.Collections.Generic.IEqualityComparer{T}"/>
         /// implementation to use when comparing items.</param>
         /// <exception cref="T:System.ArgumentNullException"><paramref name="collection"/> is a null reference
-        /// (Nothing in Visual Basic). -or-
-        /// <paramref name="comparer"/> is a null reference (Nothing in Visual Basic).
+        /// (Nothing in Visual Basic).
         /// </exception>
         public ConcurrentHashSet(IEnumerable<T> collection, IEqualityComparer<T> comparer)
             : this(comparer)
@@ -192,8 +190,6 @@ namespace ConcurrentCollections
         /// when comparing items.</param>
         /// <exception cref="T:System.ArgumentNullException">
         /// <paramref name="collection"/> is a null reference.
-        /// -or-
-        /// <paramref name="comparer"/> is a null reference.
         /// </exception>
         /// <exception cref="T:System.ArgumentOutOfRangeException">
         /// <paramref name="concurrencyLevel"/> is less than 1.
@@ -222,7 +218,6 @@ namespace ConcurrentCollections
         /// <paramref name="concurrencyLevel"/> is less than 1. -or-
         /// <paramref name="capacity"/> is less than 0.
         /// </exception>
-        /// <exception cref="T:System.ArgumentNullException"><paramref name="comparer"/> is a null reference.</exception>
         public ConcurrentHashSet(int concurrencyLevel, int capacity, IEqualityComparer<T> comparer)
             : this(concurrencyLevel, capacity, false, comparer)
         {
@@ -232,7 +227,6 @@ namespace ConcurrentCollections
         {
             if (concurrencyLevel < 1) throw new ArgumentOutOfRangeException(nameof(concurrencyLevel));
             if (capacity < 0) throw new ArgumentOutOfRangeException(nameof(capacity));
-            if (comparer == null) throw new ArgumentNullException(nameof(comparer));
 
             // The capacity should be at least as large as the concurrency level. Otherwise, we would have locks that don't guard
             // any buckets.
@@ -253,7 +247,7 @@ namespace ConcurrentCollections
 
             _growLockArray = growLockArray;
             _budget = buckets.Length / locks.Length;
-            _comparer = comparer;
+            _comparer = comparer ?? EqualityComparer<T>.Default;
         }
 
         /// <summary>
