@@ -20,12 +20,11 @@
     <PackageTags>concurrency</PackageTags>
     <RepositoryUrl>https://github.com/i3arnon/ConcurrentHashSet</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <DocumentationFile>ConcurrentCollections.xml</DocumentationFile>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="ConcurrentCollections.xml" />
-  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard1.0\ConcurrentCollections.xml</DocumentationFile>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Collections" Version="4.3.0" />
