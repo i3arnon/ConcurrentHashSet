@@ -15,7 +15,7 @@ namespace ConcurrentCollections
     /// concurrently from multiple threads.
     /// </remarks>
     [DebuggerDisplay("Count = {Count}")]
-    public sealed class ConcurrentHashSet<T> : IReadOnlyCollection<T>, ICollection<T>
+    public class ConcurrentHashSet<T> : IReadOnlyCollection<T>, ICollection<T>
     {
         private const int DefaultCapacity = 31;
         private const int MaxLockNumber = 1024;
@@ -718,7 +718,7 @@ namespace ConcurrentCollections
             }
         }
 
-        private sealed class Tables
+        private class Tables
         {
             public readonly Node[] Buckets;
             public readonly object[] Locks;
@@ -733,7 +733,7 @@ namespace ConcurrentCollections
             }
         }
 
-        private sealed class Node
+        private class Node
         {
             public readonly T Item;
             public readonly int Hashcode;
