@@ -9,7 +9,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>ConcurrentHashSet</PackageId>
     <Product>ConcurrentHashSet</Product>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Authors>Bar Arnon</Authors>
     <Company>Bar Arnon</Company>
     <Description>A thread-safe hash-based set</Description>
