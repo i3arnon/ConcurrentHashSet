@@ -1,11 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <AssemblyName>ConcurrentCollections</AssemblyName>
+    <RootNamespace>ConcurrentCollections</RootNamespace>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <Authors>Bar Arnon</Authors>
     <Company>Bar Arnon</Company>
     <Copyright>Copyright 2019 Bar Arnon</Copyright>
     <Description>A thread-safe hash-based set</Description>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    <IncludeSymbols>true</IncludeSymbols>
     <PackageId>ConcurrentHashSet</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/i3arnon/ConcurrentHashSet</PackageProjectUrl>
@@ -14,16 +22,10 @@
     <Product>ConcurrentHashSet</Product>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/i3arnon/ConcurrentHashSet</RepositoryUrl>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <TargetFrameworks>netstandard1.0;netstandard2.0;net461</TargetFrameworks>
     <Title>ConcurrentHashSet</Title>
     <Version>1.1.0</Version>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <AssemblyName>ConcurrentCollections</AssemblyName>
-    <RootNamespace>ConcurrentCollections</RootNamespace>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
   </PropertyGroup>
 
 </Project>
