@@ -291,7 +291,8 @@ namespace ConcurrentCollections
                     return;
                 }
 
-                var newTables = new Tables(new Node[DefaultCapacity], _tables.Locks, new int[_tables.CountPerLock.Length]);
+                var tables = _tables;
+                var newTables = new Tables(new Node[DefaultCapacity], tables.Locks, new int[tables.CountPerLock.Length]);
                 _tables = newTables;
                 _budget = Math.Max(1, newTables.Buckets.Length / newTables.Locks.Length);
             }
@@ -444,7 +445,7 @@ namespace ConcurrentCollections
                 var count = 0;
 
                 var countPerLock = _tables.CountPerLock;
-                for (var i = 0; i < _tables.Locks.Length && count >= 0; i++)
+                for (var i = 0; i < countPerLock.Length && count >= 0; i++)
                 {
                     count += countPerLock[i];
                 }
@@ -473,7 +474,8 @@ namespace ConcurrentCollections
 
             if (_budget == 0)
             {
-                _budget = _tables.Buckets.Length / _tables.Locks.Length;
+                var tables = _tables;
+                _budget = tables.Buckets.Length / tables.Locks.Length;
             }
         }
 
