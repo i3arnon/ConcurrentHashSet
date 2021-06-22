@@ -48,9 +48,10 @@ namespace ConcurrentCollections
                 {
                     AcquireAllLocks(ref acquiredLocks);
 
-                    for (var i = 0; i < _tables.CountPerLock.Length; i++)
+                    var countPerLocks = _tables.CountPerLock;
+                    for (var i = 0; i < countPerLocks.Length; i++)
                     {
-                        count += _tables.CountPerLock[i];
+                        count += countPerLocks[i];
                     }
                 }
                 finally
@@ -71,26 +72,38 @@ namespace ConcurrentCollections
         {
             get
             {
+                if (!AreAllBucketsEmpty())
+                {
+                    return false;
+                }
+
                 var acquiredLocks = 0;
                 try
                 {
                     AcquireAllLocks(ref acquiredLocks);
 
-                    for (var i = 0; i < _tables.CountPerLock.Length; i++)
-                    {
-                        if (_tables.CountPerLock[i] != 0)
-                        {
-                            return false;
-                        }
-                    }
+                    return AreAllBucketsEmpty();
                 }
                 finally
                 {
                     ReleaseLocks(0, acquiredLocks);
                 }
 
-                return true;
+                bool AreAllBucketsEmpty()
+                {
+                    var countPerLock = _tables.CountPerLock;
+                    for (var i = 0; i < countPerLock.Length; i++)
+                    {
+                        if (countPerLock[i] != 0)
+                        {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
             }
+
         }
 
         /// <summary>
@@ -424,9 +437,10 @@ namespace ConcurrentCollections
 
                 var count = 0;
 
+                var countPerLock = _tables.CountPerLock;
                 for (var i = 0; i < _tables.Locks.Length && count >= 0; i++)
                 {
-                    count += _tables.CountPerLock[i];
+                    count += countPerLock[i];
                 }
 
                 if (array.Length - count < arrayIndex || count < 0) //"count" itself or "count + arrayIndex" can overflow
