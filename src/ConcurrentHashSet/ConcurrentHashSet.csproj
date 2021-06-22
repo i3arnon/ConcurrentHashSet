@@ -2,30 +2,31 @@
 
   <PropertyGroup>
     <AssemblyName>ConcurrentCollections</AssemblyName>
-    <RootNamespace>ConcurrentCollections</RootNamespace>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <Authors>Bar Arnon</Authors>
-    <Company>Bar Arnon</Company>
-    <Copyright>Copyright 2019 Bar Arnon</Copyright>
+    <ContinuousIntegrationBuild>True</ContinuousIntegrationBuild>
+    <Copyright>Copyright 2021 Bar Arnon</Copyright>
     <Description>A thread-safe hash-based set</Description>
+    <Deterministic>true</Deterministic>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <IncludeSource>true</IncludeSource>
     <IncludeSymbols>true</IncludeSymbols>
     <PackageId>ConcurrentHashSet</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/i3arnon/ConcurrentHashSet</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageTags>concurrency</PackageTags>
-    <Product>ConcurrentHashSet</Product>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/i3arnon/ConcurrentHashSet</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <RootNamespace>ConcurrentCollections</RootNamespace>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <TargetFrameworks>netstandard1.0;netstandard2.0;net461</TargetFrameworks>
     <Title>ConcurrentHashSet</Title>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <Version>1.1.0</Version>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
 
 </Project>
