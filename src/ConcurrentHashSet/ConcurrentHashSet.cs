@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 namespace ConcurrentCollections
@@ -146,7 +147,7 @@ namespace ConcurrentCollections
         /// </summary>
         /// <param name="comparer">The <see cref="T:System.Collections.Generic.IEqualityComparer{T}"/>
         /// implementation to use when comparing items.</param>
-        public ConcurrentHashSet(IEqualityComparer<T> comparer)
+        public ConcurrentHashSet(IEqualityComparer<T>? comparer)
             : this(DefaultConcurrencyLevel, DefaultCapacity, true, comparer)
         {
         }
@@ -167,7 +168,7 @@ namespace ConcurrentCollections
         /// <exception cref="T:System.ArgumentNullException"><paramref name="collection"/> is a null reference
         /// (Nothing in Visual Basic).
         /// </exception>
-        public ConcurrentHashSet(IEnumerable<T> collection, IEqualityComparer<T> comparer)
+        public ConcurrentHashSet(IEnumerable<T> collection, IEqualityComparer<T>? comparer)
             : this(comparer)
         {
             if (collection == null) throw new ArgumentNullException(nameof(collection));
@@ -194,7 +195,7 @@ namespace ConcurrentCollections
         /// <exception cref="T:System.ArgumentOutOfRangeException">
         /// <paramref name="concurrencyLevel"/> is less than 1.
         /// </exception>
-        public ConcurrentHashSet(int concurrencyLevel, IEnumerable<T> collection, IEqualityComparer<T> comparer)
+        public ConcurrentHashSet(int concurrencyLevel, IEnumerable<T> collection, IEqualityComparer<T>? comparer)
             : this(concurrencyLevel, DefaultCapacity, false, comparer)
         {
             if (collection == null) throw new ArgumentNullException(nameof(collection));
@@ -218,12 +219,12 @@ namespace ConcurrentCollections
         /// <paramref name="concurrencyLevel"/> is less than 1. -or-
         /// <paramref name="capacity"/> is less than 0.
         /// </exception>
-        public ConcurrentHashSet(int concurrencyLevel, int capacity, IEqualityComparer<T> comparer)
+        public ConcurrentHashSet(int concurrencyLevel, int capacity, IEqualityComparer<T>? comparer)
             : this(concurrencyLevel, capacity, false, comparer)
         {
         }
 
-        private ConcurrentHashSet(int concurrencyLevel, int capacity, bool growLockArray, IEqualityComparer<T> comparer)
+        private ConcurrentHashSet(int concurrencyLevel, int capacity, bool growLockArray, IEqualityComparer<T>? comparer)
         {
             if (concurrencyLevel < 1) throw new ArgumentOutOfRangeException(nameof(concurrencyLevel));
             if (capacity < 0) throw new ArgumentOutOfRangeException(nameof(capacity));
@@ -301,7 +302,7 @@ namespace ConcurrentCollections
         /// a value that has more complete data than the value you currently have, although their
         /// comparer functions indicate they are equal.
         /// </remarks>
-        public bool TryGetValue(T equalValue, out T actualValue)
+        public bool TryGetValue(T equalValue, [MaybeNullWhen(false)] out T actualValue)
         {
             var hashcode = _comparer.GetHashCode(equalValue);
 
@@ -352,10 +353,10 @@ namespace ConcurrentCollections
                         continue;
                     }
 
-                    Node previous = null;
+                    Node? previous = null;
                     for (var current = tables.Buckets[bucketNo]; current != null; current = current.Next)
                     {
-                        Debug.Assert((previous == null && current == tables.Buckets[bucketNo]) || previous.Next == current);
+                        Debug.Assert((previous == null && current == tables.Buckets[bucketNo]) || previous!.Next == current);
 
                         if (hashcode == current.Hashcode && _comparer.Equals(current.Item, item))
                         {
@@ -479,10 +480,10 @@ namespace ConcurrentCollections
                     }
 
                     // Try to find this item in the bucket
-                    Node previous = null;
+                    Node? previous = null;
                     for (var current = tables.Buckets[bucketNo]; current != null; current = current.Next)
                     {
-                        Debug.Assert(previous == null && current == tables.Buckets[bucketNo] || previous.Next == current);
+                        Debug.Assert(previous == null && current == tables.Buckets[bucketNo] || previous!.Next == current);
                         if (hashcode == current.Hashcode && _comparer.Equals(current.Item, item))
                         {
                             return false;
@@ -737,12 +738,12 @@ namespace ConcurrentCollections
 
         private class Tables
         {
-            public readonly Node[] Buckets;
+            public readonly Node?[] Buckets;
             public readonly object[] Locks;
 
             public volatile int[] CountPerLock;
 
-            public Tables(Node[] buckets, object[] locks, int[] countPerLock)
+            public Tables(Node?[] buckets, object[] locks, int[] countPerLock)
             {
                 Buckets = buckets;
                 Locks = locks;
@@ -755,9 +756,9 @@ namespace ConcurrentCollections
             public readonly T Item;
             public readonly int Hashcode;
 
-            public volatile Node Next;
+            public volatile Node? Next;
 
-            public Node(T item, int hashcode, Node next)
+            public Node(T item, int hashcode, Node? next)
             {
                 Item = item;
                 Hashcode = hashcode;
