@@ -88,22 +88,7 @@ namespace ConcurrentCollections
                 {
                     ReleaseLocks(0, acquiredLocks);
                 }
-
-                bool AreAllBucketsEmpty()
-                {
-                    var countPerLock = _tables.CountPerLock;
-                    for (var i = 0; i < countPerLock.Length; i++)
-                    {
-                        if (countPerLock[i] != 0)
-                        {
-                            return false;
-                        }
-                    }
-
-                    return true;
-                }
             }
-
         }
 
         /// <summary>
@@ -284,6 +269,11 @@ namespace ConcurrentCollections
             try
             {
                 AcquireAllLocks(ref locksAcquired);
+
+                if (AreAllBucketsEmpty())
+                {
+                    return;
+                }
 
                 var newTables = new Tables(new Node[DefaultCapacity], _tables.Locks, new int[_tables.CountPerLock.Length]);
                 _tables = newTables;
@@ -559,6 +549,20 @@ namespace ConcurrentCollections
 
             Debug.Assert(bucketNo >= 0 && bucketNo < bucketCount);
             Debug.Assert(lockNo >= 0 && lockNo < lockCount);
+        }
+
+        private bool AreAllBucketsEmpty()
+        {
+            var countPerLock = _tables.CountPerLock;
+            for (var i = 0; i < countPerLock.Length; i++)
+            {
+                if (countPerLock[i] != 0)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private void GrowTable(Tables tables)
