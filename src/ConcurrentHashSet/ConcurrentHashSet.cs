@@ -30,6 +30,22 @@ namespace ConcurrentCollections
         private static int DefaultConcurrencyLevel => Environment.ProcessorCount;
 
         /// <summary>
+        /// Gets the <see cref="IEqualityComparer{T}" />
+        /// that is used to determine equality for the values in the set.
+        /// </summary>
+        /// <value>
+        /// The <see cref="IEqualityComparer{T}" /> generic interface implementation that is used to 
+        /// provide hash values and determine equality for the values in the current <see cref="ConcurrentHashSet{T}" />.
+        /// </value>
+        /// <remarks>
+        /// <see cref="ConcurrentHashSet{T}" /> requires an equality implementation to determine
+        /// whether values are equal. You can specify an implementation of the <see cref="IEqualityComparer{T}" />
+        /// generic interface by using a constructor that accepts a comparer parameter;
+        /// if you do not specify one, the default generic equality comparer <see cref="EqualityComparer{T}.Default" /> is used.
+        /// </remarks>
+        public IEqualityComparer<T> Comparer => _comparer;
+
+        /// <summary>
         /// Gets the number of items contained in the <see
         /// cref="ConcurrentHashSet{T}"/>.
         /// </summary>
