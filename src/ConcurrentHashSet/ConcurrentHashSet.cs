@@ -755,7 +755,7 @@ namespace ConcurrentCollections
             public readonly Node?[] Buckets;
             public readonly object[] Locks;
 
-            public volatile int[] CountPerLock;
+            public readonly int[] CountPerLock;
 
             public Tables(Node?[] buckets, object[] locks, int[] countPerLock)
             {
