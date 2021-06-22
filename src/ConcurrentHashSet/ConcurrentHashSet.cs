@@ -287,9 +287,23 @@ namespace ConcurrentCollections
         /// </summary>
         /// <param name="item">The item to locate in the <see cref="ConcurrentHashSet{T}"/>.</param>
         /// <returns>true if the <see cref="ConcurrentHashSet{T}"/> contains the item; otherwise, false.</returns>
-        public bool Contains(T item)
+        public bool Contains(T item) => TryGetValue(item, out _);
+
+        /// <summary>
+        /// Searches the <see cref="ConcurrentHashSet{T}"/> for a given value and returns the equal value it finds, if any.
+        /// </summary>
+        /// <param name="equalValue">The value to search for.</param>
+        /// <param name="actualValue">The value from the set that the search found, or the default value of <typeparamref name="T"/> when the search yielded no match.</param>
+        /// <returns>A value indicating whether the search was successful.</returns>
+        /// <remarks>
+        /// This can be useful when you want to reuse a previously stored reference instead of
+        /// a newly constructed one (so that more sharing of references can occur) or to look up
+        /// a value that has more complete data than the value you currently have, although their
+        /// comparer functions indicate they are equal.
+        /// </remarks>
+        public bool TryGetValue(T equalValue, out T actualValue)
         {
-            var hashcode = _comparer.GetHashCode(item);
+            var hashcode = _comparer.GetHashCode(equalValue);
 
             // We must capture the _buckets field in a local variable. It is set to a new table on each table resize.
             var tables = _tables;
@@ -302,13 +316,16 @@ namespace ConcurrentCollections
 
             while (current != null)
             {
-                if (hashcode == current.Hashcode && _comparer.Equals(current.Item, item))
+                if (hashcode == current.Hashcode && _comparer.Equals(current.Item, equalValue))
                 {
+                    actualValue = current.Item;
                     return true;
                 }
+
                 current = current.Next;
             }
 
+            actualValue = default;
             return false;
         }
 
