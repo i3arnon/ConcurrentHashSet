@@ -115,9 +115,9 @@ namespace ConcurrentCollections
         /// <param name="capacity">The initial number of elements that the <see
         /// cref="ConcurrentHashSet{T}"/>
         /// can contain.</param>
-        /// <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="concurrencyLevel"/> is
+        /// <exception cref="System.ArgumentOutOfRangeException"><paramref name="concurrencyLevel"/> is
         /// less than 1.</exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException"> <paramref name="capacity"/> is less than
+        /// <exception cref="System.ArgumentOutOfRangeException"> <paramref name="capacity"/> is less than
         /// 0.</exception>
         public ConcurrentHashSet(int concurrencyLevel, int capacity)
             : this(concurrencyLevel, capacity, false, null)
@@ -127,14 +127,14 @@ namespace ConcurrentCollections
         /// <summary>
         /// Initializes a new instance of the <see cref="ConcurrentHashSet{T}"/>
         /// class that contains elements copied from the specified <see
-        /// cref="T:System.Collections.IEnumerable{T}"/>, has the default concurrency
+        /// cref="System.Collections.Generic.IEnumerable{T}"/>, has the default concurrency
         /// level, has the default initial capacity, and uses the default comparer for the item type.
         /// </summary>
         /// <param name="collection">The <see
-        /// cref="T:System.Collections.IEnumerable{T}"/> whose elements are copied to
+        /// cref="System.Collections.Generic.IEnumerable{T}"/> whose elements are copied to
         /// the new
         /// <see cref="ConcurrentHashSet{T}"/>.</param>
-        /// <exception cref="T:System.ArgumentNullException"><paramref name="collection"/> is a null reference.</exception>
+        /// <exception cref="System.ArgumentNullException"><paramref name="collection"/> is a null reference.</exception>
         public ConcurrentHashSet(IEnumerable<T> collection)
             : this(collection, null)
         {
@@ -143,9 +143,9 @@ namespace ConcurrentCollections
         /// <summary>
         /// Initializes a new instance of the <see cref="ConcurrentHashSet{T}"/>
         /// class that is empty, has the specified concurrency level and capacity, and uses the specified
-        /// <see cref="T:System.Collections.Generic.IEqualityComparer{T}"/>.
+        /// <see cref="System.Collections.Generic.IEqualityComparer{T}"/>.
         /// </summary>
-        /// <param name="comparer">The <see cref="T:System.Collections.Generic.IEqualityComparer{T}"/>
+        /// <param name="comparer">The <see cref="System.Collections.Generic.IEqualityComparer{T}"/>
         /// implementation to use when comparing items.</param>
         public ConcurrentHashSet(IEqualityComparer<T>? comparer)
             : this(DefaultConcurrencyLevel, DefaultCapacity, true, comparer)
@@ -155,17 +155,17 @@ namespace ConcurrentCollections
         /// <summary>
         /// Initializes a new instance of the <see cref="ConcurrentHashSet{T}"/>
         /// class that contains elements copied from the specified <see
-        /// cref="T:System.Collections.IEnumerable"/>, has the default concurrency level, has the default
+        /// cref="System.Collections.IEnumerable"/>, has the default concurrency level, has the default
         /// initial capacity, and uses the specified
-        /// <see cref="T:System.Collections.Generic.IEqualityComparer{T}"/>.
+        /// <see cref="System.Collections.Generic.IEqualityComparer{T}"/>.
         /// </summary>
         /// <param name="collection">The <see
-        /// cref="T:System.Collections.IEnumerable{T}"/> whose elements are copied to
+        /// cref="System.Collections.Generic.IEnumerable{T}"/> whose elements are copied to
         /// the new
         /// <see cref="ConcurrentHashSet{T}"/>.</param>
-        /// <param name="comparer">The <see cref="T:System.Collections.Generic.IEqualityComparer{T}"/>
+        /// <param name="comparer">The <see cref="System.Collections.Generic.IEqualityComparer{T}"/>
         /// implementation to use when comparing items.</param>
-        /// <exception cref="T:System.ArgumentNullException"><paramref name="collection"/> is a null reference
+        /// <exception cref="System.ArgumentNullException"><paramref name="collection"/> is a null reference
         /// (Nothing in Visual Basic).
         /// </exception>
         public ConcurrentHashSet(IEnumerable<T> collection, IEqualityComparer<T>? comparer)
@@ -179,20 +179,20 @@ namespace ConcurrentCollections
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConcurrentHashSet{T}"/> 
-        /// class that contains elements copied from the specified <see cref="T:System.Collections.IEnumerable"/>, 
+        /// class that contains elements copied from the specified <see cref="System.Collections.IEnumerable"/>, 
         /// has the specified concurrency level, has the specified initial capacity, and uses the specified 
-        /// <see cref="T:System.Collections.Generic.IEqualityComparer{T}"/>.
+        /// <see cref="System.Collections.Generic.IEqualityComparer{T}"/>.
         /// </summary>
         /// <param name="concurrencyLevel">The estimated number of threads that will update the 
         /// <see cref="ConcurrentHashSet{T}"/> concurrently.</param>
-        /// <param name="collection">The <see cref="T:System.Collections.IEnumerable{T}"/> whose elements are copied to the new 
+        /// <param name="collection">The <see cref="System.Collections.Generic.IEnumerable{T}"/> whose elements are copied to the new 
         /// <see cref="ConcurrentHashSet{T}"/>.</param>
-        /// <param name="comparer">The <see cref="T:System.Collections.Generic.IEqualityComparer{T}"/> implementation to use 
+        /// <param name="comparer">The <see cref="System.Collections.Generic.IEqualityComparer{T}"/> implementation to use 
         /// when comparing items.</param>
-        /// <exception cref="T:System.ArgumentNullException">
+        /// <exception cref="System.ArgumentNullException">
         /// <paramref name="collection"/> is a null reference.
         /// </exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="System.ArgumentOutOfRangeException">
         /// <paramref name="concurrencyLevel"/> is less than 1.
         /// </exception>
         public ConcurrentHashSet(int concurrencyLevel, IEnumerable<T> collection, IEqualityComparer<T>? comparer)
@@ -206,16 +206,16 @@ namespace ConcurrentCollections
         /// <summary>
         /// Initializes a new instance of the <see cref="ConcurrentHashSet{T}"/>
         /// class that is empty, has the specified concurrency level, has the specified initial capacity, and
-        /// uses the specified <see cref="T:System.Collections.Generic.IEqualityComparer{T}"/>.
+        /// uses the specified <see cref="System.Collections.Generic.IEqualityComparer{T}"/>.
         /// </summary>
         /// <param name="concurrencyLevel">The estimated number of threads that will update the
         /// <see cref="ConcurrentHashSet{T}"/> concurrently.</param>
         /// <param name="capacity">The initial number of elements that the <see
         /// cref="ConcurrentHashSet{T}"/>
         /// can contain.</param>
-        /// <param name="comparer">The <see cref="T:System.Collections.Generic.IEqualityComparer{T}"/>
+        /// <param name="comparer">The <see cref="System.Collections.Generic.IEqualityComparer{T}"/>
         /// implementation to use when comparing items.</param>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
+        /// <exception cref="System.ArgumentOutOfRangeException">
         /// <paramref name="concurrencyLevel"/> is less than 1. -or-
         /// <paramref name="capacity"/> is less than 0.
         /// </exception>
@@ -257,7 +257,7 @@ namespace ConcurrentCollections
         /// <param name="item">The item to add.</param>
         /// <returns>true if the items was added to the <see cref="ConcurrentHashSet{T}"/>
         /// successfully; false if it already exists.</returns>
-        /// <exception cref="T:System.OverflowException">The <see cref="ConcurrentHashSet{T}"/>
+        /// <exception cref="System.OverflowException">The <see cref="ConcurrentHashSet{T}"/>
         /// contains too many items.</exception>
         public bool Add(T item) =>
             AddInternal(item, _comparer.GetHashCode(item), true);
