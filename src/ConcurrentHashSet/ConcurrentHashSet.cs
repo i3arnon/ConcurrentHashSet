@@ -637,7 +637,7 @@ namespace ConcurrentCollections
                 if (_growLockArray && tables.Locks.Length < MaxLockNumber)
                 {
                     newLocks = new object[tables.Locks.Length * 2];
-                    Array.Copy(tables.Locks, 0, newLocks, 0, tables.Locks.Length);
+                    Array.Copy(tables.Locks, newLocks, tables.Locks.Length);
                     for (var i = tables.Locks.Length; i < newLocks.Length; i++)
                     {
                         newLocks[i] = new object();
