@@ -274,7 +274,19 @@ namespace ConcurrentCollections
         /// <exception cref="OverflowException">The <see cref="ConcurrentHashSet{T}"/>
         /// contains too many items.</exception>
         public bool Add(T item) =>
-            AddInternal(item, _comparer.GetHashCode(item), true);
+            AddInternal(item, _comparer.GetHashCode(item), true, out _);
+
+        /// <summary>
+        /// Adds the specified item to the <see cref="ConcurrentHashSet{T}"/>.
+        /// </summary>
+        /// <param name="item">The item to add.</param>
+        /// <param name="itemInSet">The item that was added, or if the item already existed, the existing item</param>
+        /// <returns>true if the items was added to the <see cref="ConcurrentHashSet{T}"/>
+        /// successfully; false if it already exists.</returns>
+        /// <exception cref="OverflowException">The <see cref="ConcurrentHashSet{T}"/>
+        /// contains too many items.</exception>
+        public bool Add(T item, out T itemInSet) =>
+            AddInternal(item, _comparer.GetHashCode(item), true, out itemInSet);
 
         /// <summary>
         /// Removes all items from the <see cref="ConcurrentHashSet{T}"/>.
@@ -469,7 +481,7 @@ namespace ConcurrentCollections
         {
             foreach (var item in collection)
             {
-                AddInternal(item, _comparer.GetHashCode(item), false);
+                AddInternal(item, _comparer.GetHashCode(item), false, out _);
             }
 
             if (_budget == 0)
@@ -479,7 +491,7 @@ namespace ConcurrentCollections
             }
         }
 
-        private bool AddInternal(T item, int hashcode, bool acquireLock)
+        private bool AddInternal(T item, int hashcode, bool acquireLock, out T itemInSet)
         {
             while (true)
             {
@@ -508,6 +520,7 @@ namespace ConcurrentCollections
                         Debug.Assert(previous == null && current == tables.Buckets[bucketNo] || previous!.Next == current);
                         if (hashcode == current.Hashcode && _comparer.Equals(current.Item, item))
                         {
+                            itemInSet = current.Item;
                             return false;
                         }
                         previous = current;
@@ -549,6 +562,7 @@ namespace ConcurrentCollections
                     GrowTable(tables);
                 }
 
+                itemInSet = item;
                 return true;
             }
         }
