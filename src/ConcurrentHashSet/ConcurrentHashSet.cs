@@ -411,22 +411,7 @@ namespace ConcurrentCollections
         /// of the collection.  The contents exposed through the enumerator may contain modifications
         /// made to the collection after <see cref="IEnumerable{T}.GetEnumerator"/> was called.
         /// </remarks>
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
-        {
-            var buckets = _tables.Buckets;
-
-            for (var i = 0; i < buckets.Length; i++)
-            {
-                // The Volatile.Read ensures that the load of the fields of 'current' doesn't move before the load from buckets[i].
-                var current = Volatile.Read(ref buckets[i]);
-
-                while (current != null)
-                {
-                    yield return current.Item;
-                    current = current.Next;
-                }
-            }
-        }
+        IEnumerator<T> IEnumerable<T>.GetEnumerator() => new Enumerator(this);
 
         /// <summary>Returns a value-type enumerator that iterates through the <see
         /// cref="ConcurrentHashSet{T}"/>.</summary>
@@ -460,7 +445,7 @@ namespace ConcurrentCollections
                 {
                     if (_current != null)
                         return _current.Item;
-                    throw new InvalidOperationException(nameof(Current));
+                    return default(T)!;
                 }
             }
 
@@ -474,7 +459,7 @@ namespace ConcurrentCollections
                 _current = null;
             }
 
-            object IEnumerator.Current => throw new NotImplementedException();
+            object? IEnumerator.Current => (_current != null) ? (object)_current.Item! : null;
 
             /// <summary>
             /// Disposes the resources used by this enumerator.
