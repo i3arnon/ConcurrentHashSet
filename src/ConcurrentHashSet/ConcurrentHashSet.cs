@@ -422,96 +422,111 @@ namespace ConcurrentCollections
         /// of the collection.  The contents exposed through the enumerator may contain modifications
         /// made to the collection after <see cref="GetEnumerator"/> was called.
         /// </remarks>
-        public Enumerator GetEnumerator()
-        {
-            return new Enumerator(this);
-        }
+        public Enumerator GetEnumerator() => new Enumerator(this);
 
         /// <summary>
         /// Represents an enumerator for <see cref="ConcurrentHashSet{T}" />.
         /// </summary>
         public struct Enumerator : IEnumerator<T>
         {
+            // Provides a manually-implemented version of (approximately) this iterator:
+            //     Node?[] buckets = _tables.Buckets;
+            //     for (int i = 0; i < buckets.Length; i++)
+            //         for (Node? current = Volatile.Read(ref buckets[i]); current != null; current = current.Next)
+            //             yield return new current.Item;
+
+            private readonly ConcurrentHashSet<T> _set;
+
             private Node?[]? _buckets;
-            private int _bucketIndex;
-            private Node? _current;
+            private Node? _node;
+            private int _i;
+            private int _state;
+
+            private const int StateUninitialized = 0;
+            private const int StateOuterloop = 1;
+            private const int StateInnerLoop = 2;
+            private const int StateDone = 3;
+
+            /// <summary>
+            /// Constructs an enumerator for <see cref="ConcurrentHashSet{T}" />.
+            /// </summary>
+            public Enumerator(ConcurrentHashSet<T> set)
+            {
+                _set = set;
+                _buckets = null;
+                _node = null;
+                Current = default!;
+                _i = -1;
+                _state = StateUninitialized;
+            }
 
             /// <summary>
             /// Gets the element in the collection at the current position of the enumerator.
             /// </summary>
-            public T Current
-            {
-                get
-                {
-                    if (_current != null)
-                        return _current.Item;
-                    return default(T)!;
-                }
-            }
+            /// <value>The element in the collection at the current position of the enumerator.</value>
+            public T Current { get; private set; }
+
+            object? IEnumerator.Current => Current;
 
             /// <summary>
-            /// Creates an enumerator for the specified <see cref="ConcurrentHashSet{T}" />.
+            /// Sets the enumerator to its initial position, which is before the first element in the collection.
             /// </summary>
-            public Enumerator(ConcurrentHashSet<T> set)
-            {
-                _buckets = set._tables.Buckets;
-                _bucketIndex = -1;
-                _current = null;
-            }
-
-            object? IEnumerator.Current => (_current != null) ? (object)_current.Item! : null;
-
-            /// <summary>
-            /// Disposes the resources used by this enumerator.
-            /// </summary>
-            public void Dispose()
+            public void Reset()
             {
                 _buckets = null;
-                _current = null;
-                _bucketIndex = -1;
+                _node = null;
+                Current = default!;
+                _i = -1;
+                _state = StateUninitialized;
             }
+
+            /// <summary>
+            /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            /// </summary>
+            public void Dispose() { }
 
             /// <summary>
             /// Advances the enumerator to the next element of the collection.
             /// </summary>
-            /// <returns>True if the enumerator was successfully advanced to next element.</returns>
+            /// <returns>true if the enumerator was successfully advanced to the next element; false if the enumerator has passed the end of the collection.</returns>
             public bool MoveNext()
             {
-                if (_buckets == null) return false;
-                if (_bucketIndex >= _buckets.Length)
+                switch (_state)
+                {
+                    case StateUninitialized:
+                        _buckets = _set._tables.Buckets;
+                        _i = -1;
+                        goto case StateOuterloop;
+
+                    case StateOuterloop:
+                        Node?[]? buckets = _buckets;
+                        Debug.Assert(buckets != null);
+
+                        int i = ++_i;
+                        if ((uint)i < (uint)buckets!.Length)
+                        {
+                            // The Volatile.Read ensures that we have a copy of the reference to buckets[i]:
+                            // this protects us from reading fields ('_key', '_value' and '_next') of different instances.
+                            _node = Volatile.Read(ref buckets[i]);
+                            _state = StateInnerLoop;
+                            goto case StateInnerLoop;
+                        }
+                        goto default;
+
+                    case StateInnerLoop:
+                        Node? node = _node;
+                        if (node != null)
+                        {
+                            Current = node.Item;
+                            _node = node.Next;
+                            return true;
+                        }
+                        goto case StateOuterloop;
+
+                    default:
+                        _state = StateDone;
                         return false;
-                if (_current == null)
-                    return FindNextNonEmptyBucket();
-                else if (_current.Next == null)
-                {
-                        _bucketIndex++;
-                        _current = null;
-                        FindNextNonEmptyBucket();
                 }
-                else
-                    _current = _current.Next;
-                return _current != null;
-            }
-
-            private bool FindNextNonEmptyBucket()
-            {
-                if (_buckets == null) return false;
-                if (_bucketIndex < 0) _bucketIndex = 0;
-                while (_current == null && _bucketIndex < _buckets.Length)
-                {
-                    _current = Volatile.Read(ref _buckets[_bucketIndex]);
-                    if (_current == null) _bucketIndex++;
-                }
-                return _current != null;
-            }
-
-            /// <summary>
-            /// Resets the enumerator to it's starting position.
-            /// </summary>
-            public void Reset()
-            {
-                _bucketIndex = -1;
-                _current = null;
             }
         }
 
