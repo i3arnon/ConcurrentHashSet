@@ -400,7 +400,7 @@ namespace ConcurrentCollections
             }
         }
 
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<T>)this).GetEnumerator();
 
         /// <summary>Returns an enumerator that iterates through the <see
         /// cref="ConcurrentHashSet{T}"/>.</summary>
@@ -409,21 +409,123 @@ namespace ConcurrentCollections
         /// The enumerator returned from the collection is safe to use concurrently with
         /// reads and writes to the collection, however it does not represent a moment-in-time snapshot
         /// of the collection.  The contents exposed through the enumerator may contain modifications
+        /// made to the collection after <see cref="IEnumerable{T}.GetEnumerator"/> was called.
+        /// </remarks>
+        IEnumerator<T> IEnumerable<T>.GetEnumerator() => new Enumerator(this);
+
+        /// <summary>Returns a value-type enumerator that iterates through the <see
+        /// cref="ConcurrentHashSet{T}"/>.</summary>
+        /// <returns>An enumerator for the <see cref="ConcurrentHashSet{T}"/>.</returns>
+        /// <remarks>
+        /// The enumerator returned from the collection is safe to use concurrently with
+        /// reads and writes to the collection, however it does not represent a moment-in-time snapshot
+        /// of the collection.  The contents exposed through the enumerator may contain modifications
         /// made to the collection after <see cref="GetEnumerator"/> was called.
         /// </remarks>
-        public IEnumerator<T> GetEnumerator()
+        public Enumerator GetEnumerator() => new Enumerator(this);
+
+        /// <summary>
+        /// Represents an enumerator for <see cref="ConcurrentHashSet{T}" />.
+        /// </summary>
+        public struct Enumerator : IEnumerator<T>
         {
-            var buckets = _tables.Buckets;
+            // Provides a manually-implemented version of (approximately) this iterator:
+            //     Node?[] buckets = _tables.Buckets;
+            //     for (int i = 0; i < buckets.Length; i++)
+            //         for (Node? current = Volatile.Read(ref buckets[i]); current != null; current = current.Next)
+            //             yield return new current.Item;
 
-            for (var i = 0; i < buckets.Length; i++)
+            private readonly ConcurrentHashSet<T> _set;
+
+            private Node?[]? _buckets;
+            private Node? _node;
+            private int _i;
+            private int _state;
+
+            private const int StateUninitialized = 0;
+            private const int StateOuterloop = 1;
+            private const int StateInnerLoop = 2;
+            private const int StateDone = 3;
+
+            /// <summary>
+            /// Constructs an enumerator for <see cref="ConcurrentHashSet{T}" />.
+            /// </summary>
+            public Enumerator(ConcurrentHashSet<T> set)
             {
-                // The Volatile.Read ensures that the load of the fields of 'current' doesn't move before the load from buckets[i].
-                var current = Volatile.Read(ref buckets[i]);
+                _set = set;
+                _buckets = null;
+                _node = null;
+                Current = default!;
+                _i = -1;
+                _state = StateUninitialized;
+            }
 
-                while (current != null)
+            /// <summary>
+            /// Gets the element in the collection at the current position of the enumerator.
+            /// </summary>
+            /// <value>The element in the collection at the current position of the enumerator.</value>
+            public T Current { get; private set; }
+
+            object? IEnumerator.Current => Current;
+
+            /// <summary>
+            /// Sets the enumerator to its initial position, which is before the first element in the collection.
+            /// </summary>
+            public void Reset()
+            {
+                _buckets = null;
+                _node = null;
+                Current = default!;
+                _i = -1;
+                _state = StateUninitialized;
+            }
+
+            /// <summary>
+            /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            /// </summary>
+            public void Dispose() { }
+
+            /// <summary>
+            /// Advances the enumerator to the next element of the collection.
+            /// </summary>
+            /// <returns>true if the enumerator was successfully advanced to the next element; false if the enumerator has passed the end of the collection.</returns>
+            public bool MoveNext()
+            {
+                switch (_state)
                 {
-                    yield return current.Item;
-                    current = current.Next;
+                    case StateUninitialized:
+                        _buckets = _set._tables.Buckets;
+                        _i = -1;
+                        goto case StateOuterloop;
+
+                    case StateOuterloop:
+                        Node?[]? buckets = _buckets;
+                        Debug.Assert(buckets != null);
+
+                        int i = ++_i;
+                        if ((uint)i < (uint)buckets!.Length)
+                        {
+                            // The Volatile.Read ensures that we have a copy of the reference to buckets[i]:
+                            // this protects us from reading fields ('_key', '_value' and '_next') of different instances.
+                            _node = Volatile.Read(ref buckets[i]);
+                            _state = StateInnerLoop;
+                            goto case StateInnerLoop;
+                        }
+                        goto default;
+
+                    case StateInnerLoop:
+                        Node? node = _node;
+                        if (node != null)
+                        {
+                            Current = node.Item;
+                            _node = node.Next;
+                            return true;
+                        }
+                        goto case StateOuterloop;
+
+                    default:
+                        _state = StateDone;
+                        return false;
                 }
             }
         }
