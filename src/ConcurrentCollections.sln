@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26228.9
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConcurrentHashSet", "ConcurrentHashSet\ConcurrentHashSet.csproj", "{58063048-C7B0-4F4D-B27E-1ED5F9789AF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConcurrentHashSet", "ConcurrentHashSet\ConcurrentHashSet.csproj", "{58063048-C7B0-4F4D-B27E-1ED5F9789AF7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConcurrentHashSet.Test", "ConcurrentHashSet.Test\ConcurrentHashSet.Test.csproj", "{A559187C-0971-42CD-AE8C-2BC1132965FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +17,15 @@ Global
 		{58063048-C7B0-4F4D-B27E-1ED5F9789AF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58063048-C7B0-4F4D-B27E-1ED5F9789AF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58063048-C7B0-4F4D-B27E-1ED5F9789AF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A559187C-0971-42CD-AE8C-2BC1132965FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A559187C-0971-42CD-AE8C-2BC1132965FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A559187C-0971-42CD-AE8C-2BC1132965FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A559187C-0971-42CD-AE8C-2BC1132965FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F8839D42-C1EB-4D5A-8C15-D7A32C0EA9E2}
 	EndGlobalSection
 EndGlobal

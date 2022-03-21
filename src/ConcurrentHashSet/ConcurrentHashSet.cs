@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
-namespace ConcurrentCollections
+namespace System.Collections.Concurrent
 {
     /// <summary>
     /// Represents a thread-safe hash-based unique collection.
@@ -274,7 +271,7 @@ namespace ConcurrentCollections
         /// <exception cref="OverflowException">The <see cref="ConcurrentHashSet{T}"/>
         /// contains too many items.</exception>
         public bool Add(T item) =>
-            AddInternal(item, _comparer.GetHashCode(item), true);
+            AddInternal(item, true); // , _comparer.GetHashCode(item)
 
         /// <summary>
         /// Removes all items from the <see cref="ConcurrentHashSet{T}"/>.
@@ -322,8 +319,14 @@ namespace ConcurrentCollections
         /// a value that has more complete data than the value you currently have, although their
         /// comparer functions indicate they are equal.
         /// </remarks>
-        public bool TryGetValue(T equalValue, [MaybeNullWhen(false)] out T actualValue)
+        public bool TryGetValue(T equalValue, out T? actualValue)
         {
+            if (equalValue == null)
+            {
+                actualValue = default;
+                return false;
+            }
+
             var hashcode = _comparer.GetHashCode(equalValue);
 
             // We must capture the _buckets field in a local variable. It is set to a new table on each table resize.
@@ -357,6 +360,9 @@ namespace ConcurrentCollections
         /// <returns>true if an item was removed successfully; otherwise, false.</returns>
         public bool TryRemove(T item)
         {
+            if (item == null) 
+                return false;
+
             var hashcode = _comparer.GetHashCode(item);
             while (true)
             {
@@ -569,9 +575,9 @@ namespace ConcurrentCollections
 
         private void InitializeFromCollection(IEnumerable<T> collection)
         {
-            foreach (var item in collection)
+            foreach (T item in collection)
             {
-                AddInternal(item, _comparer.GetHashCode(item), false);
+                AddInternal(item, false); // , _comparer.GetHashCode(item)
             }
 
             if (_budget == 0)
@@ -581,8 +587,12 @@ namespace ConcurrentCollections
             }
         }
 
-        private bool AddInternal(T item, int hashcode, bool acquireLock)
+        private bool AddInternal(T item, bool acquireLock) // , int hashcode
         {
+            if (item == null)
+                return false;
+
+            int hashcode = _comparer.GetHashCode(item);
             while (true)
             {
                 var tables = _tables;

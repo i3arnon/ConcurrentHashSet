@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <AssemblyName>ConcurrentCollections</AssemblyName>
+    <AssemblyName>System.Collections.Concurrent.ConcurrentHashSet</AssemblyName>
     <Authors>Bar Arnon</Authors>
     <ContinuousIntegrationBuild>True</ContinuousIntegrationBuild>
     <Copyright>Copyright 2021 Bar Arnon</Copyright>
@@ -12,20 +12,20 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <IncludeSource>true</IncludeSource>
     <IncludeSymbols>true</IncludeSymbols>
-    <PackageId>ConcurrentHashSet</PackageId>
+    <PackageId>System.Collections.Concurrent.ConcurrentHashSet</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageTags>concurrency</PackageTags>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <RootNamespace>ConcurrentCollections</RootNamespace>
+    <RootNamespace>System.Collections.Concurrent</RootNamespace>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <TargetFrameworks>netstandard1.0;netstandard2.0;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard1.0;netstandard2.0;netstandard2.1;net6</TargetFrameworks>
     <Title>ConcurrentHashSet</Title>
-    <Version>1.2.0</Version>
+    <Version>1.2.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>
